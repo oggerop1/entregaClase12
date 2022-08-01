@@ -6,27 +6,27 @@ class Producto{
     };
 
     // set and get de las propiedades
-    set_nombre(nombre){
+    setNombre(nombre){
         this.nombre = nombre;
     };
 
-    set_precio(precio){
+    setPrecio(precio){
         this.precio = precio;
     };
 
-    set_stock(stock){
+    setStock(stock){
         this.stock = stock;
     };
 
-    get_nombre(){
+    getNombre(){
         return this.nombre;
     };
 
-    get_precio(){
+    getPrecio(){
         return this.precio;
     };
 
-    get_stock(){
+    getStock(){
         return this.stock;
     };
 
@@ -48,9 +48,9 @@ document.getElementById("form-productos").addEventListener("submit", function(e)
         // alta
         // instancia de la clase producto
         const producto = new Producto ();
-        producto.set_nombre(obtenerNombreProducto);
-        producto.set_precio(obtenerPrecio);
-        producto.set_stock (obtenerStock);
+        producto.setNombre(obtenerNombreProducto);
+        producto.setPrecio(obtenerPrecio);
+        producto.setStock (obtenerStock);
         
         // llamo funcion para agregar en un array el producto
         agregarProductosBase(producto);
@@ -75,7 +75,7 @@ let baseProductos = []; //creo array vacio
 let elementIndex = 0;
 function agregarProductosBase(producto){
     // con filter verifica si lo que ingresó esta en el arrary 
-    let duplicado = baseProductos.filter(prod =>prod.get_nombre() === producto.get_nombre())
+    let duplicado = baseProductos.filter(prod =>prod.getNombre() === producto.getNombre())
 
     //con el if controlo que no se agregue el mismo nombre del producto. 1= true
     if (duplicado.length ===1){
@@ -93,9 +93,9 @@ function agregarProductosBase(producto){
 
 function agregarProductosTabla(producto){      
     let fila = document.createElement("tr");
-    fila.innerHTML = `<td class="nomProd">${producto.get_nombre()}</td>
-                      <td class="stockProd">${producto.get_stock()}</td>
-                      <td class ="precioProd">${producto.get_precio()}</td>
+    fila.innerHTML = `<td class="nomProd">${producto.getNombre()}</td>
+                      <td class="stockProd">${producto.getStock()}</td>
+                      <td class ="precioProd">${producto.getPrecio()}</td>
                       <td><button class="btn-danger borrar_elemento">Borrar</button></td>
                       <td><button class="btn btn-success Editar_elemento">Editar</button></td>
                       <td><button class="btn btn-success">comprar</button></td>`;
@@ -134,13 +134,13 @@ function mostrarMensaje(mensaje, claseBT){
 function borrar_producto(e){
     let filaDelete = e.target.parentNode.parentNode;
     let tdValorNombre = filaDelete.firstElementChild.innerHTML;
-    let duplicado = baseProductos.filter(prod =>prod.get_nombre() === tdValorNombre);
+    let duplicado = baseProductos.filter(prod =>prod.getNombre() === tdValorNombre);
 
     //con el if controlo que no se agregue el mismo nombre del producto. 1= true
     if (duplicado.length ===1){
         // con el for busco la coincidencia para borrar con el metodo splice
         for(var i = baseProductos.length - 1; i >= 0; i--) { 
-            if(baseProductos[i].get_nombre() === tdValorNombre) 
+            if(baseProductos[i].getNombre() === tdValorNombre) 
             { baseProductos.splice(i, 1); } }
 
         mostrarMensaje("eliminado de la base,","danger");
@@ -154,7 +154,7 @@ function editar_producto(e){
     let filaEditar = e.target.parentNode.parentNode;
     let tdValorNombre = filaEditar.firstElementChild.innerHTML;
 
-    let duplicado = baseProductos.filter(prod =>prod.get_nombre() === tdValorNombre);
+    let duplicado = baseProductos.filter(prod =>prod.getNombre() === tdValorNombre);
     
     //obtengo los valores a traves de la clase de cada uno de los td.
     let nombre_producto = filaEditar.querySelector(".nomProd").textContent;
@@ -166,7 +166,7 @@ function editar_producto(e){
         document.getElementById("precio").value = precio_producto;
         document.getElementById("stock").value = stock_producto;
         document.getElementById("abm").value = 'Editar';
-        elementIndex = baseProductos.findIndex((obj => obj.get_nombre() === tdValorNombre));
+        elementIndex = baseProductos.findIndex((obj => obj.getNombre() === tdValorNombre));
     }
 
 
