@@ -107,7 +107,7 @@ function agregarProductosTabla(producto){
     let botonesBorrar = document.querySelectorAll(".borrarElemento");
     
     for( let boton of botonesBorrar){
-        boton.addEventListener("click" , borrar_producto);
+        boton.addEventListener("click" , borrarProducto);
     }
 
     let botonesEditar = document.querySelectorAll(".editarElemento");
@@ -131,7 +131,7 @@ function mostrarMensaje(mensaje, claseBT){
 }
 
 
-function borrar_producto(e){
+function borrarProducto(e){
     let filaDelete = e.target.parentNode.parentNode;
     let tdValorNombre = filaDelete.firstElementChild.innerHTML;
     let duplicado = baseProductos.filter(prod =>prod.getNombre() === tdValorNombre);
@@ -150,7 +150,7 @@ function borrar_producto(e){
     filaDelete.remove();
 }
 
-function EditarProducto(e){
+function editarProducto(e){
     let filaEditar = e.target.parentNode.parentNode;
     let tdValorNombre = filaEditar.firstElementChild.innerHTML;
 
