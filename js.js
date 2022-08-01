@@ -96,23 +96,23 @@ function agregarProductosTabla(producto){
     fila.innerHTML = `<td class="nomProd">${producto.getNombre()}</td>
                       <td class="stockProd">${producto.getStock()}</td>
                       <td class ="precioProd">${producto.getPrecio()}</td>
-                      <td><button class="btn-danger borrar_elemento">Borrar</button></td>
-                      <td><button class="btn btn-success Editar_elemento">Editar</button></td>
+                      <td><button class="btn-danger borrarElemento">Borrar</button></td>
+                      <td><button class="btn btn-success editarElemento">Editar</button></td>
                       <td><button class="btn btn-success">comprar</button></td>`;
 
                       
     let tabla = document.getElementById("tbody");
 
     tabla.append(fila);
-    let botones_borrar = document.querySelectorAll(".borrar_elemento");
+    let botonesBorrar = document.querySelectorAll(".borrarElemento");
     
-    for( let boton of botones_borrar){
+    for( let boton of botonesBorrar){
         boton.addEventListener("click" , borrar_producto);
     }
 
-    let botones_editar = document.querySelectorAll(".Editar_elemento");
-    for (let btn_edit of botones_editar ){
-        btn_edit.addEventListener("click",editar_producto);
+    let botonesEditar = document.querySelectorAll(".editarElemento");
+    for (let btn_edit of botonesEditar ){
+        btn_edit.addEventListener("click",editarProducto);
     }
 }
 
@@ -150,7 +150,7 @@ function borrar_producto(e){
     filaDelete.remove();
 }
 
-function editar_producto(e){
+function EditarProducto(e){
     let filaEditar = e.target.parentNode.parentNode;
     let tdValorNombre = filaEditar.firstElementChild.innerHTML;
 
