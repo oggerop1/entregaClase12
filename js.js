@@ -98,7 +98,7 @@ function agregarProductosTabla(producto){
                       <td class ="precioProd">${producto.getPrecio()}</td>
                       <td><button class="btn-danger borrarElemento">Borrar</button></td>
                       <td><button class="btn btn-success editarElemento">Editar</button></td>
-                      <td><button class="btn btn-success">comprar</button></td>`;
+                      <td><button class="btn btn-success btnComprar">Comprar</button></td>`;
 
                       
     let tabla = document.getElementById("tbody");
@@ -113,6 +113,13 @@ function agregarProductosTabla(producto){
     let botonesEditar = document.querySelectorAll(".editarElemento");
     for (let btn_edit of botonesEditar ){
         btn_edit.addEventListener("click",editarProducto);
+    }
+
+    let btnCompra = document.querySelectorAll(".btnComprar");
+    console.log(btnCompra);
+
+    for( let boton of btnCompra){
+        boton.addEventListener("click" , altaCarrito);
     }
 }
 
@@ -157,17 +164,86 @@ function editarProducto(e){
     let duplicado = baseProductos.filter(prod =>prod.getNombre() === tdValorNombre);
     
     //obtengo los valores a traves de la clase de cada uno de los td.
-    let nombre_producto = filaEditar.querySelector(".nomProd").textContent;
-    let precio_producto = filaEditar.querySelector(".precioProd").textContent;
-    let stock_producto = filaEditar.querySelector(".stockProd").textContent;
+    let nombreProducto = filaEditar.querySelector(".nomProd").textContent;
+    let precioProducto = filaEditar.querySelector(".precioProd").textContent;
+    let stockProducto = filaEditar.querySelector(".stockProd").textContent;
   
     if (duplicado.length ===1){
-        document.getElementById("nombre").value = nombre_producto;
-        document.getElementById("precio").value = precio_producto;
-        document.getElementById("stock").value = stock_producto;
+        document.getElementById("nombre").value = nombreProducto;
+        document.getElementById("precio").value = precioProducto;
+        document.getElementById("stock").value = stockProducto;
         document.getElementById("abm").value = 'Editar';
         elementIndex = baseProductos.findIndex((obj => obj.getNombre() === tdValorNombre));
     }
 
 
+}
+
+
+///Carrito
+let carrito = [];
+
+function altaCarrito(e){
+
+    let hijo = e.target;
+    let padre = hijo.parentNode;
+    let abuelo = padre.parentNode;
+
+    //obtengo los valores a traves de la clase de cada uno de los td.
+    let filaComprar = e.target.parentNode.parentNode;
+    let nombreProducto = filaComprar.querySelector(".nomProd").textContent;
+    let precioProducto = filaComprar.querySelector(".precioProd").textContent;
+    let stockProducto = filaComprar.querySelector(".stockProd").textContent;
+
+
+    let producto = {
+        nombre: nombreProducto,
+        precio: precioProducto,
+        cantidad: 1
+
+    };
+
+
+    carrito.push(producto);
+
+    let arregloJSON = JSON.stringify(carrito);
+    localStorage.setItem("carrito" , arregloJSON);
+
+    console.log(carrito);
+
+
+    mostrarCarrito( producto);
+}
+
+function mostrarCarrito( producto){
+
+
+    let fila = document.createElement("tr");
+
+    fila.innerHTML = `<td>${producto.nombre}</td>
+                      <td>${producto.precio}</td>
+                      <td>${producto.cantidad}</td>
+                      <td><button class="btn-danger borrarElementoCarrito">Borrar</button></td>`;
+
+    
+    let tabla = document.getElementById("tablaCarrito");
+
+    tabla.append(fila);
+
+
+    let botonesBorrar = document.querySelectorAll(".borrarElementoCarrito");
+
+    for( let boton of botonesBorrar){
+
+        boton.addEventListener("click" , borrarProductoCarrito);
+    }
+
+
+}
+
+function borrarProductoCarrito(e){
+
+    let abuelo = e.target.parentNode.parentNode;
+    abuelo.remove();
+    
 }
