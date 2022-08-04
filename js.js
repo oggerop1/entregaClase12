@@ -41,7 +41,7 @@ document.getElementById("form-productos").addEventListener("submit", function(e)
     let obtenerPrecio           = document.getElementById("precio").value;
     let obtenerStock            = document.getElementById("stock").value;
 
-    // 
+    //operadores avanzado OR ||
     if(obtenerNombreProducto==='' || obtenerPrecio==='' || obtenerStock ==='' ){
         mostrarMensaje("ingrese los datos solicitados", "danger")
     }else if(document.getElementById("abm").value ==="Agregar"){
@@ -58,9 +58,6 @@ document.getElementById("form-productos").addEventListener("submit", function(e)
         e.preventDefault();
     }else{
         //editar
-        
-        //elementIndex = baseProductos.findIndex((obj => obj.get_nombre() === ));
-        
         baseProductos[elementIndex].nombre = obtenerNombreProducto;
         baseProductos[elementIndex].precio = obtenerPrecio;
         baseProductos[elementIndex].stock  = obtenerStock;
@@ -73,6 +70,7 @@ document.getElementById("form-productos").addEventListener("submit", function(e)
 
 let baseProductos = []; //creo array vacio
 let elementIndex = 0;
+
 function agregarProductosBase(producto){
     // con filter verifica si lo que ingresó esta en el arrary 
     let duplicado = baseProductos.filter(prod =>prod.getNombre() === producto.getNombre())
@@ -80,8 +78,6 @@ function agregarProductosBase(producto){
     //con el if controlo que no se agregue el mismo nombre del producto. 1= true
     if (duplicado.length ===1){
         mostrarMensaje("Producto ya creado con ese nombre, por favor ingrese otro Nombre!!,","danger");
-        //document.getElementById("form-productos").reset();
-        
     }else{
         // agrego al arrary con push
         baseProductos.push(producto); 
@@ -93,9 +89,12 @@ function agregarProductosBase(producto){
 
 function agregarProductosTabla(producto){      
     let fila = document.createElement("tr");
-    fila.innerHTML = `<td class="nomProd">${producto.getNombre()}</td>
-                      <td class="stockProd">${producto.getStock()}</td>
-                      <td class ="precioProd">${producto.getPrecio()}</td>
+    //Desestructuración
+    const {nombre, stock, precio}= producto;
+
+    fila.innerHTML = `<td class="nomProd">${nombre}</td>
+                      <td class="stockProd">${stock}</td>
+                      <td class ="precioProd">${precio}</td>
                       <td><button class="btn-danger borrarElemento">Borrar</button></td>
                       <td><button class="btn btn-success editarElemento">Editar</button></td>
                       <td><button class="btn btn-success btnComprar">Comprar</button></td>`;
@@ -104,8 +103,8 @@ function agregarProductosTabla(producto){
     let tabla = document.getElementById("tbody");
 
     tabla.append(fila);
-    let botonesBorrar = document.querySelectorAll(".borrarElemento");
     
+    let botonesBorrar = document.querySelectorAll(".borrarElemento");
     for( let boton of botonesBorrar){
         boton.addEventListener("click" , borrarProducto);
     }
@@ -116,8 +115,6 @@ function agregarProductosTabla(producto){
     }
 
     let btnCompra = document.querySelectorAll(".btnComprar");
-    console.log(btnCompra);
-
     for( let boton of btnCompra){
         boton.addEventListener("click" , altaCarrito);
     }
@@ -160,7 +157,8 @@ function borrarProducto(e){
 function editarProducto(e){
     let filaEditar = e.target.parentNode.parentNode;
     let tdValorNombre = filaEditar.firstElementChild.innerHTML;
-
+    
+    
     let duplicado = baseProductos.filter(prod =>prod.getNombre() === tdValorNombre);
     
     //obtengo los valores a traves de la clase de cada uno de los td.
@@ -175,75 +173,62 @@ function editarProducto(e){
         document.getElementById("abm").value = 'Editar';
         elementIndex = baseProductos.findIndex((obj => obj.getNombre() === tdValorNombre));
     }
-
-
 }
 
 
 ///Carrito
-let carrito = [];
+//operadores avanzado OR ||
+const carrito = JSON.parse(localStorage.getItem('carrito')) || []
+let cantidadProdCompra = 0;
 
 function altaCarrito(e){
 
-    let hijo = e.target;
-    let padre = hijo.parentNode;
-    let abuelo = padre.parentNode;
 
     //obtengo los valores a traves de la clase de cada uno de los td.
     let filaComprar = e.target.parentNode.parentNode;
     let nombreProducto = filaComprar.querySelector(".nomProd").textContent;
     let precioProducto = filaComprar.querySelector(".precioProd").textContent;
     let stockProducto = filaComprar.querySelector(".stockProd").textContent;
-
-
-    let producto = {
+    //operadores avanzados
+    stockProducto --;
+    cantidadProdCompra ++;
+    
+    let productoCarrito = {
         nombre: nombreProducto,
         precio: precioProducto,
-        cantidad: 1
-
+        cantidad: cantidadProdCompra
     };
-
-
-    carrito.push(producto);
-
+    
+    carrito.push(productoCarrito);
     let arregloJSON = JSON.stringify(carrito);
     localStorage.setItem("carrito" , arregloJSON);
+    mostrarCarrito( productoCarrito);
 
-    console.log(carrito);
-
-
-    mostrarCarrito( producto);
 }
 
-function mostrarCarrito( producto){
-
-
+function mostrarCarrito( productoCarrito){
     let fila = document.createElement("tr");
 
-    fila.innerHTML = `<td>${producto.nombre}</td>
-                      <td>${producto.precio}</td>
-                      <td>${producto.cantidad}</td>
+    //Desestructuración:
+    const{nombre,precio,cantidad} = productoCarrito;
+
+    fila.innerHTML = `<td>${nombre}</td>
+                      <td>${precio}</td>
+                      <td>${cantidad}</td>
                       <td><button class="btn-danger borrarElementoCarrito">Borrar</button></td>`;
 
     
     let tabla = document.getElementById("tablaCarrito");
-
     tabla.append(fila);
 
 
     let botonesBorrar = document.querySelectorAll(".borrarElementoCarrito");
-
     for( let boton of botonesBorrar){
-
         boton.addEventListener("click" , borrarProductoCarrito);
     }
-
-
 }
 
 function borrarProductoCarrito(e){
-
-    let abuelo = e.target.parentNode.parentNode;
-    abuelo.remove();
-    
+    let trCarrito = e.target.parentNode.parentNode;
+    trCarrito.remove();
 }
