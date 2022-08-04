@@ -61,7 +61,7 @@ document.getElementById("form-productos").addEventListener("submit", function(e)
         baseProductos[elementIndex].nombre = obtenerNombreProducto;
         baseProductos[elementIndex].precio = obtenerPrecio;
         baseProductos[elementIndex].stock  = obtenerStock;
-        console.log(baseProductos);
+       
         document.getElementById("tablaProductos").onload;
         document.getElementById("abm").value = 'Agregar';
         document.getElementById("form-productos").reset();
